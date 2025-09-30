@@ -1,0 +1,6 @@
+#Tue Sep 30 11:20:32 PET 2025
+__DEFAULT__=false
+expression=persistence.xml
+org.eclipse.help.ui.localSearch.master=true
+org.eclipse.sdk.Eclipse.master=true
+org.eclipse.sdk.Google.master=true

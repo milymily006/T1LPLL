@@ -1,0 +1,31 @@
+package org.cibertec.entidades;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@Entity
+@Table(name = "inventario")
+public class inventario {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int nro_inventario;
+
+    @Column(insertable = false, updatable = false)
+    private java.sql.Timestamp fecha;
+
+    @ManyToOne
+    @JoinColumn(name = "id_prod", nullable = false)
+    private Producto producto;
+
+    @Column(nullable = false)
+    private double costo_ingreso;
+
+    @Column(nullable = false)
+    private String motivo_ingreso;
+
+    @Transient // no se guarda en BD
+    private int estado;
+}

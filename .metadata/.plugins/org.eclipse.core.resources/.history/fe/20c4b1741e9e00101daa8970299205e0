@@ -1,0 +1,26 @@
+package org.cibertec.entidades;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+@Entity
+@Table(name = "productos")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Producto {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id_prod;
+
+    @Column(nullable = false, length = 50)
+    private String nom_prod;
+
+    @ManyToOne
+    @JoinColumn(name = "id_cate", nullable = false)
+    private Categoria categoria;
+
+    @Column(nullable = false)
+    private Integer stock_actual;
+}

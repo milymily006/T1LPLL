@@ -1,0 +1,28 @@
+package org.cibertec.entidades;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+@Entity
+@Table(name = "categoria")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Categoria {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id_cate;
+
+    @Column(nullable = false, length = 50)
+    private String descripcion;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private FrecuenciaCompra frecuencia_compra;
+
+    // Enum interno para frecuencia_compra
+    public enum FrecuenciaCompra {
+        Diario, Interdiario, Semanal, Por_Stock
+    }
+}

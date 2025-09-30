@@ -1,0 +1,57 @@
+package org.cibertec.main;
+
+import jakarta.persistence.*;
+import org.cibertec.entidades.*;
+
+import java.util.Scanner;
+
+public class MainRegistroApellido {
+
+    public static void main(String[] args) {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidad"); // 👈 nombre del persistence.xml
+        EntityManager em = emf.createEntityManager();
+        Scanner sc = new Scanner(System.in);
+
+        try {
+            System.out.println("=== REGISTRO DE INVENTARIO ===");
+            
+            // Seleccionar producto existente
+            System.out.print("Ingrese ID del producto: ");
+            int idProd = sc.nextInt();
+            Producto producto = em.find(Producto.class, idProd);
+            
+            if (producto == null) {
+                System.out.println("❌ Producto no encontrado.");
+                return;
+            }
+
+            // Datos de inventario
+            System.out.print("Ingrese costo de ingreso: ");
+            double costo = sc.nextDouble();
+            sc.nextLine(); // limpiar buffer
+
+            System.out.print("Ingrese motivo de ingreso: ");
+            String motivo = sc.nextLine();
+
+            // Crear inventario
+            Inventario inv = new Inventario();
+            inv.setProducto(producto);
+            inv.setCosto_ingreso(costo);
+            inv.setMotivo_ingreso(motivo);
+            inv.setEstado(1); // valor de prueba, no se guarda en BD
+
+            // Guardar en BD
+            em.getTransaction().begin();
+            em.persist(inv);
+            em.getTransaction().commit();
+
+            System.out.println("✅ Inventario registrado con éxito.");
+        } catch (Exception e) {
+            System.out.println("❌ Error al registrar inventario: " + e.getMessage());
+        } finally {
+            em.close();
+            emf.close();
+            sc.close();
+        }
+    }
+}

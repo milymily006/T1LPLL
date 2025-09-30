@@ -1,0 +1,68 @@
+package org.cibertec.main;
+
+import org.cibertec.entidades.Inventario;
+import org.cibertec.entidades.Producto;
+
+import jakarta.persistence.*;
+import java.util.List;
+import java.util.Scanner;
+
+public class MainRegistroApellido {
+
+    public static void main(String[] args) {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("miUnidad");
+        EntityManager em = emf.createEntityManager();
+        Scanner sc = new Scanner(System.in);
+
+        try {
+            System.out.println("=== REGISTRO DE INVENTARIO ===");
+
+            // Listar productos
+            List<Producto> productos = em.createQuery("SELECT p FROM Producto p", Producto.class).getResultList();
+            System.out.println("Productos disponibles:");
+            for (Producto p : productos) {
+                System.out.println(p.getId_prod() + " - " + p.getNom_prod());
+            }
+
+            // Seleccionar producto
+            System.out.print("Ingrese ID del producto: ");
+            int idProd = sc.nextInt();
+            sc.nextLine(); // limpiar buffer
+
+            Producto producto = em.find(Producto.class, idProd);
+            if (producto == null) {
+                System.out.println("Producto no encontrado.");
+                return;
+            }
+
+            // Ingresar datos del inventario
+            System.out.print("Ingrese costo de ingreso: ");
+            double costo = sc.nextDouble();
+            sc.nextLine();
+
+            System.out.print("Ingrese motivo de ingreso: ");
+            String motivo = sc.nextLine();
+
+            // Crear inventario
+            Inventario inv = new Inventario();
+            inv.setProducto(producto);
+            inv.setCosto_ingreso(costo);
+            inv.setMotivo_ingreso(motivo);
+            inv.setEstado(1); // atributo transitorio
+
+            // Guardar en BD
+            em.getTransaction().begin();
+            em.persist(inv);
+            em.getTransaction().commit();
+
+            System.out.println("Inventario registrado con éxito. Nro inventario: " + inv.getNro_inventario());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            em.close();
+            emf.close();
+            sc.close();
+        }
+    }
+}

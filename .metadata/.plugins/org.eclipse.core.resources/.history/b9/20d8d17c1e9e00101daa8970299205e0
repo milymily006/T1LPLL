@@ -1,0 +1,33 @@
+package org.cibertec.entidades;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+@Entity
+@Table(name = "inventario")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Inventario {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer nro_inventario;
+
+    @Column(nullable = false, updatable = false, insertable = false,
+            columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    private java.sql.Timestamp fecha;
+
+    @ManyToOne
+    @JoinColumn(name = "id_prod", nullable = false)
+    private Producto producto;
+
+    @Column(nullable = false, precision = 10, scale = 2)
+    private Double costo_ingreso;
+
+    @Column(nullable = false, length = 100)
+    private String motivo_ingreso;
+
+    @Transient
+    private int estado; 
+}
